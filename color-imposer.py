@@ -37,7 +37,7 @@ class PixelColor(object):
             return 'rgb{}'.format(self.color);
 
 
-if __name__ == '__main__':
+def imposeColor():
     backgroundInput = str(input('Please enter a background color:\n' +
                                 ' * any standard color name, Ex: white\n' +
                                 ' * a custom color, EX: #FFF or rgb(255,255,255)\n-> '));
@@ -52,3 +52,8 @@ if __name__ == '__main__':
     print('background color: {}\n'.format(backgroundColor.toString()) +
           'foreground color: {}\n'.format(foregroundColor.toString()) +
           'imposed color:    {}'.format(imposedColor.toString()));
+
+
+if __name__ == '__main__':
+    while(True):
+        imposeColor()
