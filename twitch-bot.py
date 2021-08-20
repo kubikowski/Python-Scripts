@@ -8,15 +8,16 @@ Inputs: a string
 Outputs: writes out a string enery n seconds
 """
 
+import keyboard as kb
+import asyncio
 
-import keyboard as kb;
-import asyncio;
 
 def interrupt(text):
-    print(text);
-    kb.write(text);
+    print(text)
+    kb.write(text)
+
 
 if __name__ == '__main__':
-    inputStr = str(input('Enter some text: '));
+    inputStr = str(input('Enter some text: '))
 
-    loop = asyncio.new_event_loop();
+    loop = asyncio.new_event_loop()

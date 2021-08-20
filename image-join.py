@@ -15,28 +15,29 @@ from PIL import Image
 # This is a tool to join multiple images in an horizontal or vertical stack
 # Just input the image names when requested, choose a direction, and
 # choose an output name
-# you dont need to add the .jpg to the input or output file names
+# you don't need to add the .jpg to the input or output file names
 
-list_im = []
+file_names = []
 while True:
-    fname = str(input( "Image Name or (Stop): " ))
-    if fname.lower() == "stop": break
-    list_im.append( fname + ".jpg" )
+    file_name: str = str(input("Image Name or (Stop): "))
+    if file_name.lower() == "stop":
+        break
+    file_names.append(file_name + ".jpg")
 
-imgs = [ Image.open(i) for i in list_im ]
+images: list = [Image.open(i) for i in file_names]
 
 # pick the image which is the smallest, and resize the others to match it (can be arbitrary image shape)
-min_shape = sorted( [(np.sum(i.size), i.size ) for i in imgs])[0][1]
+min_shape: int = sorted([(np.sum(i.size), i.size) for i in images])[0][1]
 
-option = input( "(h)orizontal or (v)ertical image stack? " )
+option: str = input("(h)orizontal or (v)ertical image stack? ")
 
-if option == 'h': # horizontal stacking
-    imgs_comb = np.hstack( (np.asarray( i.resize(min_shape) ) for i in imgs ) )
-    imgs_comb = Image.fromarray( imgs_comb )
+if option == 'h':  # horizontal stacking
+    image_matrix = np.hstack((np.asarray(i.resize(min_shape)) for i in images))
+    combined_image = Image.fromarray(image_matrix)
 
-if option == 'v': # vertical stacking
-    imgs_comb = np.vstack( (np.asarray( i.resize(min_shape) ) for i in imgs ) )
-    imgs_comb = Image.fromarray( imgs_comb )
+if option == 'v':  # vertical stacking
+    image_matrix = np.vstack((np.asarray(i.resize(min_shape)) for i in images))
+    combined_image = Image.fromarray(image_matrix)
 
-outname = input( "New Image Name: " )
-imgs_comb.save( outname + ".jpg" )
+output_file_name = input("New Image Name: ")
+combined_image.save(output_file_name + ".jpg")
