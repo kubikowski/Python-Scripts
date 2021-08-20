@@ -5,7 +5,7 @@ Date: 3/21/2020
 Dependencies: keyboard
 
 Inputs: a string
-Outputs: writes out a string enery n seconds
+Outputs: writes out a string every n seconds
 """
 
 import keyboard as kb
