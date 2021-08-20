@@ -5,10 +5,10 @@ Date: 5/30/2019
 Dependencies: numpy, Pillow
 
 Inputs:
- · a list of image paths (.jpg inferred)
+ · a list of image paths
  · a stacking orientation
- · an output file path (.jpg inferred)
-Outputs: a jpg of the images stacked horizontally or vertically
+ · an output file path (.png if unspecified)
+Outputs: a combination of the images, stacked horizontally or vertically
 """
 
 from enum import Enum
@@ -16,6 +16,31 @@ from typing import Final, Optional
 
 from numpy import hstack, vstack
 from PIL import Image
+
+
+class ImageFormat(Enum):
+    JPG = 'jpeg'
+    PNG = 'png'
+
+    @staticmethod
+    def from_file_path(file_path: str) -> Optional['ImageFormat']:
+        sanitized_path: Final[str] = file_path.lower()
+
+        if sanitized_path.endswith('.jpg') or sanitized_path.endswith('.jpeg'):
+            return ImageFormat.JPG
+        if sanitized_path.endswith('.png'):
+            return ImageFormat.PNG
+
+        return None
+
+    @staticmethod
+    def format_path(file_path: str) -> str:
+        image_format: ImageFormat = ImageFormat.from_file_path(file_path)
+
+        if image_format is not None:
+            return file_path
+        else:
+            return file_path + '.png'
 
 
 class Orientation(Enum):
@@ -59,10 +84,10 @@ def get_input_image_path() -> Optional[str]:
 
     if file_path.lower() == 'stop':
         return None
-    elif file_path.endswith('.jpg'):
-        return file_path
+    elif ImageFormat.from_file_path(file_path) is None:
+        raise ValueError('unsupported file format in path: "{}"'.format(file_path))
     else:
-        return file_path + '.jpg'
+        return file_path
 
 
 def get_input_images() -> list[Image]:
@@ -82,8 +107,10 @@ def get_orientation() -> Orientation:
 
 
 def save_image(image: Image) -> None:
-    output_file_path: Final[str] = input('new image path: ')
-    image.save(output_file_path + '.jpg')
+    file_path: Final[str] = input('new image path: ')
+    formatted_path: Final[str] = ImageFormat.format_path(file_path)
+
+    image.save(formatted_path)
 
 
 def join_images() -> None:
