@@ -4,9 +4,11 @@ Written By: Nathaniel Holden
 Date: 5/30/2019
 Dependencies: numpy, Pillow
 
-Inputs: a list of images
+Inputs:
+ · a list of image paths (.jpg inferred)
+ · a stacking orientation
+ · an output file path (.jpg inferred)
 Outputs: a jpg of the images stacked horizontally or vertically
-Notes: may not currently account for image directory. 
 """
 
 from enum import Enum
@@ -27,23 +29,23 @@ class Orientation(Enum):
         if orientation == 'v':
             return Orientation.VERTICAL
 
-    def get_min_image_size(self: 'Orientation', images: list[Image]) -> int:
+    def resize_images(self: 'Orientation', images: list[Image]) -> list[Image]:
+        min_size: Final[int] = self._get_min_image_size(images)
+        return [self._resize_image(image, min_size) for image in images]
+
+    def _get_min_image_size(self: 'Orientation', images: list[Image]) -> int:
         if self == Orientation.HORIZONTAL:
             return min([i.size[1] for i in images])
         if self == Orientation.VERTICAL:
             return min([i.size[0] for i in images])
 
-    def resize_image(self: 'Orientation', image: Image, min_size: int) -> Image:
+    def _resize_image(self: 'Orientation', image: Image, min_size: int) -> Image:
         if self == Orientation.HORIZONTAL:
             scale_factor: Final[float] = float(image.size[0] / image.size[1])
             return image.resize([int(min_size * scale_factor), min_size])
         if self == Orientation.VERTICAL:
             scale_factor: Final[float] = float(image.size[1] / image.size[0])
             return image.resize([min_size, int(min_size * scale_factor)])
-
-    def resize_images(self: 'Orientation', images: list[Image]) -> list[Image]:
-        min_size: Final[int] = self.get_min_image_size(images)
-        return [self.resize_image(image, min_size) for image in images]
 
     def stack_images(self: 'Orientation', images: list[Image]) -> Image:
         if self == Orientation.HORIZONTAL:
@@ -52,26 +54,26 @@ class Orientation(Enum):
             return Image.fromarray(vstack(images))
 
 
-def get_image_input() -> Optional[str]:
-    file_name: Final[str] = input('Image Name or (Stop): ')
+def get_input_image_path() -> Optional[str]:
+    file_path: Final[str] = input('image path or (stop): ')
 
-    if file_name.lower() == 'stop':
+    if file_path.lower() == 'stop':
         return None
-    elif file_name.endswith('.jpg'):
-        return file_name
+    elif file_path.endswith('.jpg'):
+        return file_path
     else:
-        return file_name + '.jpg'
+        return file_path + '.jpg'
 
 
-def get_images_input() -> list[Image]:
-    file_names: Final[list[str]] = []
+def get_input_images() -> list[Image]:
+    file_paths: Final[list[str]] = []
 
-    file_name: Optional[str] = get_image_input()
-    while file_name is not None:
-        file_names.append(file_name)
-        file_name = get_image_input()
+    file_path: Optional[str] = get_input_image_path()
+    while file_path is not None:
+        file_paths.append(file_path)
+        file_path = get_input_image_path()
 
-    return [Image.open(i) for i in file_names]
+    return [Image.open(i) for i in file_paths]
 
 
 def get_orientation() -> Orientation:
@@ -80,16 +82,12 @@ def get_orientation() -> Orientation:
 
 
 def save_image(image: Image) -> None:
-    output_file_name: Final[str] = input('New Image Name: ')
-    image.save(output_file_name + '.jpg')
+    output_file_path: Final[str] = input('new image path: ')
+    image.save(output_file_path + '.jpg')
 
 
-# This is a tool to join multiple images in an horizontal or vertical stack
-# Just input the image names when requested, choose a direction, and
-# choose an output name
-# you don't need to add the .jpg to the input or output file names
 def join_images() -> None:
-    input_images: Final[list[Image]] = get_images_input()
+    input_images: Final[list[Image]] = get_input_images()
     orientation: Final[Orientation] = get_orientation()
 
     resized_images: Final[list[Image]] = orientation.resize_images(input_images)
