@@ -1,15 +1,19 @@
 """
 Name: Twitch Bot
-Written By: Nathaniel Holden
-Date: 3/21/2020
+Author: Nathaniel Holden
+Version: 0.0.1
+Date: 21/03/2020
 Dependencies: keyboard
 
-Inputs: a string
-Outputs: writes out a string every n seconds
+Inputs:
+  · a string to write out on repeat
+Outputs:
+  · writes out the input, as key-presses, every n seconds
 """
 
-import keyboard as kb
 import asyncio
+
+import keyboard as kb
 
 
 def interrupt(text):
