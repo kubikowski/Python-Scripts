@@ -1,5 +1,5 @@
 """
-Name: Image Join
+Name: Stack Images
 Written By: Nathaniel Holden
 Date: 5/30/2019
 Dependencies: numpy, Pillow
@@ -9,7 +9,7 @@ Inputs:
   · a stacking orientation
   · an output file path (.png if unspecified)
 Outputs:
-    a combination of the images, stacked horizontally or vertically
+  · a combination of the images, stacked horizontally or vertically
 """
 
 from typing import Final, Optional
