@@ -19,7 +19,7 @@ class PixelColor(object):
             '  · any web named color, eg: white\n' +
             '  · any hex color, eg: #FFF or #FFFFFF\n' +
             '  · any rbg color, eg: rgb(255,255,255)\n' +
-            '  -> ')
+            '  → ')
         return PixelColor(background_color)
 
     @staticmethod
@@ -28,7 +28,7 @@ class PixelColor(object):
             'Please enter a foreground color with an alpha value:\n' +
             '  · any hexa color, eg: #0007 or #0000007F\n' +
             '  · any rgba color, eg rgba(0,0,0,127)\n' +
-            '  -> ')
+            '  → ')
         return PixelColor(foreground_color)
 
     def get_imposed_color(self, imposed: 'PixelColor') -> 'PixelColor':
