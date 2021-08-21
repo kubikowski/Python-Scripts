@@ -12,9 +12,10 @@ class ImageFormat(Enum):
 
         if sanitized_path.endswith('.jpg') or sanitized_path.endswith('.jpeg'):
             return ImageFormat.JPG
-        if sanitized_path.endswith('.png'):
+        elif sanitized_path.endswith('.png'):
             return ImageFormat.PNG
-        return None
+        else:
+            return None
 
     @staticmethod
     def add_format_to_path(file_path: str) -> str:
