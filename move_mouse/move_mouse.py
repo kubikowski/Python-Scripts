@@ -1,7 +1,7 @@
 """
 Name: Move Mouse
 Author: Nathaniel Holden
-Version: 0.1.0
+Version: 0.1.1
 Date: 20/08/2021
 Dependencies: pyautogui
 
@@ -11,9 +11,10 @@ Outputs:
   · moves the mouse cursor in a diamond, at a specified interval
 """
 
-import time
+from time import sleep
+from typing import Final
 
-import pyautogui as pg
+from pyautogui import moveRel, moveTo, size, Size, Point, position
 
 
 def move_mouse() -> None:
@@ -39,28 +40,28 @@ def move_mouse_loop(frequency: int = 300, distance: int = 5) -> None:
         _bind_mouse_position(distance)
         _move_mouse_diamond(distance)
 
-        time.sleep(frequency - 1)
+        sleep(frequency - 1)
 
 
 def _bind_mouse_position(distance: int) -> None:
-    screen_size: pg.Size = pg.size()
-    mouse_position: pg.Point = pg.position()
+    screen_size: Final[Size] = size()
+    mouse_position: Final[Point] = position()
 
-    min_x = min(2 * distance, screen_size.width / 2)
-    min_y = min(2 * distance, screen_size.height / 2)
+    min_x: Final[int] = min(2 * distance, screen_size.width // 2)
+    min_y: Final[int] = min(2 * distance, screen_size.height // 2)
 
-    x: int = max(min_x, min(mouse_position.x, screen_size.width - min_x))
-    y: int = max(min_y, min(mouse_position.y, screen_size.height - min_y))
+    x: Final[int] = max(min_x, min(mouse_position.x, screen_size.width - min_x))
+    y: Final[int] = max(min_y, min(mouse_position.y, screen_size.height - min_y))
 
     if x is not mouse_position.x or y is not mouse_position.y:
-        pg.moveTo(x, y)
+        moveTo(x, y)
 
 
 def _move_mouse_diamond(distance: int) -> None:
-    pg.moveRel(+distance, +distance, 0.25)
-    pg.moveRel(-distance, +distance, 0.25)
-    pg.moveRel(-distance, -distance, 0.25)
-    pg.moveRel(+distance, -distance, 0.25)
+    moveRel(+distance, +distance, 0.25)
+    moveRel(-distance, +distance, 0.25)
+    moveRel(-distance, -distance, 0.25)
+    moveRel(+distance, -distance, 0.25)
 
 
 if __name__ == '__main__':
