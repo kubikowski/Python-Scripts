@@ -1,4 +1,4 @@
-from math import cos, radians, sin
+from math import ceil, cos, radians, sin
 from time import sleep
 from typing import Final
 
@@ -32,17 +32,17 @@ class MouseHandler(object):
 
     def _initiate_movement(self: 'MouseHandler') -> None:
         while True:
-            self._bind_mouse_position()
-            self._move_mouse_circle()
+            self._bind_inside_screen()
+            self._move_pattern_circle()
 
             sleep(self._movement_frequency - self._travel_time)
 
-    def _bind_mouse_position(self: 'MouseHandler') -> None:
+    def _bind_inside_screen(self: 'MouseHandler') -> None:
         screen_size: Final[Size] = size()
         mouse_position: Final[Point] = position()
 
-        min_x: Final[int] = min(2 * self._travel_distance, screen_size.width // 2)
-        min_y: Final[int] = min(2 * self._travel_distance, screen_size.height // 2)
+        min_x: Final[int] = min(self._travel_distance, screen_size.width // 2)
+        min_y: Final[int] = min(self._travel_distance, screen_size.height // 2)
 
         x: Final[int] = max(min_x, min(mouse_position.x, screen_size.width - min_x))
         y: Final[int] = max(min_y, min(mouse_position.y, screen_size.height - min_y))
@@ -50,7 +50,7 @@ class MouseHandler(object):
         if x is not mouse_position.x or y is not mouse_position.y:
             moveTo(x, y)
 
-    def _move_mouse_diamond(self: 'MouseHandler') -> None:
+    def _move_pattern_diamond(self: 'MouseHandler') -> None:
         segment_travel_time: Final[float] = self._travel_time / 4
 
         moveRel(+self._travel_distance, +self._travel_distance, duration=segment_travel_time, _pause=False)
@@ -58,7 +58,7 @@ class MouseHandler(object):
         moveRel(-self._travel_distance, -self._travel_distance, duration=segment_travel_time, _pause=False)
         moveRel(+self._travel_distance, -self._travel_distance, duration=segment_travel_time, _pause=False)
 
-    def _move_mouse_circle(self: 'MouseHandler') -> None:
+    def _move_pattern_circle(self: 'MouseHandler') -> None:
         total_segments: Final[int] = self._get_total_circle_segments()
 
         segment_travel_distance: Final[float] = float(self._travel_distance) * 4 / total_segments
@@ -78,6 +78,6 @@ class MouseHandler(object):
 
     def _get_total_circle_segments(self: 'MouseHandler') -> int:
         min_segments: Final[int] = self._travel_distance * 4
-        max_segments: Final[int] = int(self._travel_time / MINIMUM_DURATION) - 1
+        max_segments: Final[int] = ceil(self._travel_time / MINIMUM_DURATION - 1)
 
-        return min(min_segments, max_segments, 360)
+        return max(min(min_segments, max_segments, 360), 1)

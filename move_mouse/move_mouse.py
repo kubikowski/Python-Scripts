@@ -1,7 +1,7 @@
 """
 Name: Move Mouse
 Author: Nathaniel Holden
-Version: 0.1.2
+Version: 0.1.3
 Date: 20/08/2021
 Dependencies: pyautogui
 
