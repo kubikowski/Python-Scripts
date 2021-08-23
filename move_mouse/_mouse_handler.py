@@ -4,6 +4,8 @@ from typing import Final
 
 from pyautogui import MINIMUM_DURATION, moveRel, moveTo, size, Size, Point, position
 
+MINIMUM_FLOAT = 1 / 1000000
+
 
 class MouseHandler(object):
     def __init__(
@@ -61,8 +63,8 @@ class MouseHandler(object):
     def _move_pattern_circle(self: 'MouseHandler') -> None:
         total_segments: Final[int] = self._get_total_circle_segments()
 
-        segment_travel_distance: Final[float] = float(self._travel_distance) * 4 / total_segments
-        segment_travel_time: Final[float] = self._travel_time / total_segments
+        segment_travel_distance: Final[float] = float(self._travel_distance * 4) / total_segments
+        segment_travel_time: Final[float] = (self._travel_time / total_segments) + MINIMUM_FLOAT
 
         segment_directions: Final[list[tuple[float, float]]] = []
         for segment_number in range(total_segments):
@@ -78,6 +80,6 @@ class MouseHandler(object):
 
     def _get_total_circle_segments(self: 'MouseHandler') -> int:
         min_segments: Final[int] = self._travel_distance * 4
-        max_segments: Final[int] = ceil(self._travel_time / MINIMUM_DURATION - 1)
+        max_segments: Final[int] = ceil((self._travel_time / MINIMUM_DURATION) + MINIMUM_FLOAT - 1)
 
         return max(min(min_segments, max_segments, 360), 1)
