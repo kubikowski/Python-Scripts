@@ -17,7 +17,7 @@ from typing import Final
 from _pixel_color import PixelColor
 
 
-def impose_color():
+def impose_color() -> None:
     background_color: Final[PixelColor] = PixelColor.input_background_color()
     foreground_color: Final[PixelColor] = PixelColor.input_foreground_color()
     imposed_color: Final[PixelColor] = background_color.get_imposed_color(foreground_color)
