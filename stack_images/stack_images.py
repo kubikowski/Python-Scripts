@@ -1,7 +1,7 @@
 """
 Name: Stack Images
 Author: Nathaniel Holden
-Version: 0.2.0
+Version: 0.2.1
 Date: 30/05/2019
 Dependencies: numpy, Pillow
 
