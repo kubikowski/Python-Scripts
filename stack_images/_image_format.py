@@ -10,7 +10,7 @@ class ImageFormat(Enum):
     @staticmethod
     def from_file_path(file_path: str) -> Optional['ImageFormat']:
         sanitized_path: Final[str] = file_path.lower()
-        file_extension: Final[str] = path.splitext(sanitized_path)[-1]
+        file_extension: Final[str] = path.splitext(sanitized_path)[-1].strip('.')
 
         match file_extension:
             case 'jpg' | 'jpeg':
