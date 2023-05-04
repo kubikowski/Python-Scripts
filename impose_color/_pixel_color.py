@@ -1,4 +1,4 @@
-from typing import Final
+from typing import Final, List
 
 from PIL import ImageColor
 
@@ -30,6 +30,21 @@ class PixelColor(object):
             '  · any rgba color, eg rgba(0,0,0,127)\n' +
             '  → ')
         return PixelColor(foreground_color)
+
+    @staticmethod
+    def input_gradient_steps() -> int:
+        return int(input(
+            'Please enter a number of gradient steps\n' +
+            'between the background and foreground colors:\n' +
+            '  → '))
+
+    def get_imposed_gradient(self, imposed: 'PixelColor', gradient_steps: int) -> List['PixelColor']:
+        gradient_alphas: Final[List[int]] = [round(255 * step / (gradient_steps + 1)) for step in range(1, gradient_steps + 1)]
+        imposed_alphas: Final[List['PixelColor']] = [imposed.get_imposed_alpha(alpha) for alpha in gradient_alphas]
+        return [self.get_imposed_color(imposed_alpha) for imposed_alpha in imposed_alphas]
+
+    def get_imposed_alpha(self, alpha: int) -> 'PixelColor':
+        return PixelColor('rgba({},{},{},{})'.format(self.r, self.g, self.b, alpha))
 
     def get_imposed_color(self, imposed: 'PixelColor') -> 'PixelColor':
         r: Final[int] = self._calculate_target_hue(self.r, imposed.r, imposed.a)
