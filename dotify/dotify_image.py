@@ -1,7 +1,7 @@
 """
 Name: Dotify Images
 Author: Nathaniel Holden
-Version: 0.0.1
+Version: 0.0.2
 Date: 2023-4-28
 Dependencies: Pillow
 
@@ -58,4 +58,3 @@ if __name__ == '__main__':
             dotify_image()
         except KeyboardInterrupt:
             break
-
