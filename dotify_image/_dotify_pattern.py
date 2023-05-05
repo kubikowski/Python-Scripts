@@ -1,15 +1,9 @@
 from enum import Enum
-from typing import Final
 
 
 class DotifyPattern(Enum):
     RECTILINEAR = 'rectilinear'
     HEXAGONAL = 'hexagonal'
-
-    @staticmethod
-    def from_input() -> 'DotifyPattern':
-        pattern: Final[str] = input('(r)ectalinear or (h)exagonal: ').strip()
-        return DotifyPattern.from_string(pattern)
 
     @staticmethod
     def from_string(pattern: str) -> 'DotifyPattern':

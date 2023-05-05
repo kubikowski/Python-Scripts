@@ -1,10 +1,12 @@
+from datetime import datetime
 from math import sqrt
 from typing import Final, Dict
 
-from PIL import Image, ImageColor, ImageDraw
+from PIL import Image, ImageDraw
 
-from _dotify_pattern import DotifyPattern
+from _dotify_input import get_background_color, get_dot_size, get_method, get_pattern, get_up_scaling
 from _dotify_method import DotifyMethod
+from _dotify_pattern import DotifyPattern
 from _rgb_color import RGB, RGBColor
 
 
@@ -19,6 +21,9 @@ class Dotify:
         pattern: DotifyPattern,
         up_scaling: int,
     ) -> None:
+        start_time: Final[datetime] = datetime.now()
+        print('Generating dotified image...')
+
         self._input_image: Final[Image.Image] = input_image.convert(mode=RGB)
         self._background_color: Final[RGBColor] = background_color
         self._dot_size: Final[int] = dot_size
@@ -27,42 +32,23 @@ class Dotify:
         self._up_scaling: Final[int] = up_scaling
 
         self._output_image: Final[Image.Image] = self._get_initial_output_image()
-        self._draw = ImageDraw.Draw(im=self._output_image, mode=RGB)
+        self._draw: Final[ImageDraw] = ImageDraw.Draw(im=self._output_image, mode=RGB)
         self._draw_pattern()
+
+        finish_time: Final[datetime] = datetime.now()
+        elapsed_time: Final[datetime] = datetime.utcfromtimestamp((finish_time - start_time).total_seconds())
+        print('Completed in {} seconds.'.format(elapsed_time.strftime('%S.%f')[:-3]))
 
     @staticmethod
     def image(input_image: Image.Image) -> Image.Image:
-        background_color: Final[RGBColor] = Dotify._input_background_color()
-        dot_size: Final[int] = Dotify._input_dot_size(input_image)
-        method: Final[DotifyMethod] = DotifyMethod.from_input()
-        pattern: Final[DotifyPattern] = DotifyPattern.from_input()
-        up_scaling: Final[int] = Dotify._input_up_scaling()
+        background_color: Final[RGBColor] = get_background_color()
+        dot_size: Final[int] = get_dot_size(input_image.size)
+        method: Final[DotifyMethod] = get_method()
+        pattern: Final[DotifyPattern] = get_pattern()
+        up_scaling: Final[int] = get_up_scaling()
 
         return Dotify(input_image, background_color, dot_size, method, pattern, up_scaling)\
             ._output_image
-
-    @staticmethod
-    def _input_dot_size(input_image: Image.Image) -> int:
-        recommended_dot_size: Final[int] = max(min(input_image.size) // 100, 5)
-        print('The original image size is {} px.'.format(input_image.size))
-        print('We recommend a dot size of {} px.'.format(recommended_dot_size))
-        input_dot_size: Final[str] = input('Dot Size (px): ').strip()
-        return int(input_dot_size) if input_dot_size else recommended_dot_size
-
-    @staticmethod
-    def _input_background_color() -> RGBColor:
-        print('Would you like to specify a background color?')
-        print('If you do not, the default is black.')
-        input_color: Final[str] = input('Background Color: ').strip()
-        valid_color: Final[str] = input_color if input_color else 'black'
-        return RGBColor.of(ImageColor.getrgb(valid_color))
-
-    @staticmethod
-    def _input_up_scaling() -> int:
-        print('Would you like to up-scale the output image?')
-        print('If so, enter an up-scaling multiplier.')
-        input_up_scale: Final[str] = input('Output up-scale: ').strip()
-        return int(input_up_scale) if input_up_scale else 1
 
     def _get_initial_output_image(self: 'Dotify') -> Image.Image:
         return Image.new(
