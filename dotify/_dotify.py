@@ -44,9 +44,11 @@ class Dotify:
 
     @staticmethod
     def _input_dot_size(input_image: Image.Image) -> int:
+        recommended_dot_size: Final[int] = min(input_image.size) // 100
         print('The original image size is {} px.'.format(input_image.size))
-        print('We recommend a dot size of {} px.'.format(min(input_image.size) // 400))
-        return int(input('Dot Size (px): '))
+        print('We recommend a dot size of {} px.'.format(recommended_dot_size))
+        input_dot_size: Final[str] = input('Dot Size (px): ').strip()
+        return int(input_dot_size) if input_dot_size else recommended_dot_size
 
     @staticmethod
     def _input_background_color() -> Tuple[int, int, int]:

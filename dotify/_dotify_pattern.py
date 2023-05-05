@@ -19,4 +19,4 @@ class DotifyPattern(Enum):
             case 'h':
                 return DotifyPattern.HEXAGONAL
             case _:
-                raise ValueError('Invalid DotifyPattern: {}'.format(pattern))
+                return DotifyPattern.RECTILINEAR
