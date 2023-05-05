@@ -1,5 +1,5 @@
 from math import sqrt
-from typing import Final, Tuple, Dict
+from typing import Final, Dict
 
 from PIL import Image, ImageColor, ImageDraw
 
@@ -19,7 +19,7 @@ class Dotify:
         pattern: DotifyPattern,
         up_scaling: int,
     ) -> None:
-        self._input_image: Final[Image.Image] = input_image.convert(RGB)
+        self._input_image: Final[Image.Image] = input_image.convert(mode=RGB)
         self._background_color: Final[RGBColor] = background_color
         self._dot_size: Final[int] = dot_size
         self._method: Final[DotifyMethod] = method
@@ -27,7 +27,7 @@ class Dotify:
         self._up_scaling: Final[int] = up_scaling
 
         self._output_image: Final[Image.Image] = self._get_initial_output_image()
-        self._draw = ImageDraw.Draw(self._output_image)
+        self._draw = ImageDraw.Draw(im=self._output_image, mode=RGB)
         self._draw_pattern()
 
     @staticmethod
@@ -65,12 +65,14 @@ class Dotify:
         return int(input_up_scale) if input_up_scale else 1
 
     def _get_initial_output_image(self: 'Dotify') -> Image.Image:
-        size: Final[Tuple[int, int]] = (
-            self._input_image.width * self._up_scaling,
-            self._input_image.height * self._up_scaling,
+        return Image.new(
+            mode=RGB,
+            size=(
+                self._input_image.width * self._up_scaling,
+                self._input_image.height * self._up_scaling,
+            ),
+            color=self._background_color,
         )
-
-        return Image.new(RGB, size, self._background_color)
 
     def _draw_pattern(self: 'Dotify') -> None:
         match self._pattern:
@@ -148,7 +150,8 @@ class Dotify:
 
         return RGBColor(red, green, blue)
 
-    def _get_mode_color(self: 'Dotify', color_frequencies: Dict[RGBColor, int]) -> RGBColor:
+    @staticmethod
+    def _get_mode_color(color_frequencies: Dict[RGBColor, int]) -> RGBColor:
         return max(color_frequencies, key=color_frequencies.get)
 
     def _get_frequency(self: 'Dotify', color_frequencies: Dict[RGBColor, int], color: RGBColor) -> int:
@@ -158,10 +161,12 @@ class Dotify:
             case DotifyMethod.MODE:
                 return self._get_mode_frequency(color_frequencies, color)
 
-    def _get_mean_frequency(self: 'Dotify', color_frequencies: Dict[RGBColor, int]) -> int:
+    @staticmethod
+    def _get_mean_frequency(color_frequencies: Dict[RGBColor, int]) -> int:
         return sum(color_frequencies.values())
 
-    def _get_mode_frequency(self: 'Dotify', color_frequencies: Dict[RGBColor, int], color: RGBColor) -> int:
+    @staticmethod
+    def _get_mode_frequency(color_frequencies: Dict[RGBColor, int], color: RGBColor) -> int:
         return color_frequencies[color]
 
     def _get_x_max(self: 'Dotify', x_min: int) -> int:
