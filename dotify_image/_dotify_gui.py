@@ -1,6 +1,6 @@
 from datetime import datetime
 from os import path
-from typing import Tuple, Final
+from typing import List, Final, Tuple
 
 from PIL import ImageColor
 
@@ -9,8 +9,7 @@ from _dotify_pattern import DotifyPattern
 from _rgb_color import RGBColor
 from stack_images._image_format import ImageFormat
 
-
-__all__: list[str] = [
+__all__: Final[List[str]] = [
     'get_input_image_path',
     'get_background_color',
     'get_dot_size',
