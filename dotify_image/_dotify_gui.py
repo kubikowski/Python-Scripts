@@ -1,3 +1,4 @@
+from datetime import datetime
 from os import path
 from typing import Tuple, Final
 
@@ -7,6 +8,19 @@ from _dotify_method import DotifyMethod
 from _dotify_pattern import DotifyPattern
 from _rgb_color import RGBColor
 from stack_images._image_format import ImageFormat
+
+
+__all__: list[str] = [
+    'get_input_image_path',
+    'get_background_color',
+    'get_dot_size',
+    'get_method',
+    'get_pattern',
+    'get_up_scaling',
+    'get_output_image_path',
+    'output_start_time',
+    'output_end_time',
+]
 
 
 def get_input_image_path() -> str:
@@ -98,3 +112,15 @@ def input_output_image_path() -> str:
     return input(
         'Please enter an output image path:\n' +
         '  → ').strip()
+
+
+def output_start_time() -> datetime:
+    start_time: Final[datetime] = datetime.now()
+    print('Generating dotified image...')
+    return start_time
+
+
+def output_end_time(start_time: datetime) -> None:
+    end_time: Final[datetime] = datetime.now()
+    elapsed_time: Final[datetime] = datetime.utcfromtimestamp((end_time - start_time).total_seconds())
+    print('Completed in {} seconds.'.format(elapsed_time.strftime('%S.%f')[:-3]))

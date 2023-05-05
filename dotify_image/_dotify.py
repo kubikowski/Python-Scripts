@@ -4,7 +4,7 @@ from typing import Final, Dict
 
 from PIL import Image, ImageDraw
 
-from _dotify_input import get_background_color, get_dot_size, get_method, get_pattern, get_up_scaling
+from _dotify_gui import *
 from _dotify_method import DotifyMethod
 from _dotify_pattern import DotifyPattern
 from _rgb_color import RGB, RGBColor
@@ -21,8 +21,7 @@ class Dotify:
         pattern: DotifyPattern,
         up_scaling: int,
     ) -> None:
-        start_time: Final[datetime] = datetime.now()
-        print('Generating dotified image...')
+        start_time: Final[datetime] = output_start_time()
 
         self._input_image: Final[Image.Image] = input_image.convert(mode=RGB)
         self._background_color: Final[RGBColor] = background_color
@@ -35,9 +34,7 @@ class Dotify:
         self._draw: Final[ImageDraw] = ImageDraw.Draw(im=self._output_image, mode=RGB)
         self._draw_pattern()
 
-        finish_time: Final[datetime] = datetime.now()
-        elapsed_time: Final[datetime] = datetime.utcfromtimestamp((finish_time - start_time).total_seconds())
-        print('Completed in {} seconds.'.format(elapsed_time.strftime('%S.%f')[:-3]))
+        output_end_time(start_time)
 
     @staticmethod
     def image(input_image: Image.Image) -> Image.Image:
