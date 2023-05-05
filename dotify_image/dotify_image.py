@@ -1,7 +1,7 @@
 """
 Name: Dotify Image
 Author: Nathaniel Holden
-Version: 0.0.2
+Version: 0.0.3
 Date: 2023-4-28
 Dependencies: Pillow
 
@@ -22,7 +22,7 @@ from typing import Final
 
 from PIL import Image
 
-from dotify._dotify import Dotify
+from _dotify import Dotify
 from stack_images._image_format import ImageFormat
 
 

@@ -3,8 +3,8 @@ from typing import Final, Tuple
 
 from PIL import Image, ImageColor, ImageDraw
 
-from dotify._dotify_pattern import DotifyPattern
-from dotify._dotify_method import DotifyMethod
+from _dotify_pattern import DotifyPattern
+from _dotify_method import DotifyMethod
 
 RGB: Final[str] = 'RGB'
 
@@ -44,7 +44,7 @@ class Dotify:
 
     @staticmethod
     def _input_dot_size(input_image: Image.Image) -> int:
-        recommended_dot_size: Final[int] = min(input_image.size) // 100
+        recommended_dot_size: Final[int] = max(min(input_image.size) // 100, 5)
         print('The original image size is {} px.'.format(input_image.size))
         print('We recommend a dot size of {} px.'.format(recommended_dot_size))
         input_dot_size: Final[str] = input('Dot Size (px): ').strip()

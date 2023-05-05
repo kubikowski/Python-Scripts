@@ -8,7 +8,7 @@ class DotifyMethod(Enum):
 
     @staticmethod
     def from_input() -> 'DotifyMethod':
-        pattern: Final[str] = input('(mean) or (mode): ')
+        pattern: Final[str] = input('(mean) or (mode): ').strip()
         return DotifyMethod.from_string(pattern)
 
     @staticmethod

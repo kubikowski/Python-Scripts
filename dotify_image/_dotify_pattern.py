@@ -8,12 +8,12 @@ class DotifyPattern(Enum):
 
     @staticmethod
     def from_input() -> 'DotifyPattern':
-        pattern: Final[str] = input('(r)ectalinear or (h)exagonal: ')
+        pattern: Final[str] = input('(r)ectalinear or (h)exagonal: ').strip()
         return DotifyPattern.from_string(pattern)
 
     @staticmethod
     def from_string(pattern: str) -> 'DotifyPattern':
-        match pattern[0].lower():
+        match pattern[0].lower() if pattern else '':
             case 'r':
                 return DotifyPattern.RECTILINEAR
             case 'h':
