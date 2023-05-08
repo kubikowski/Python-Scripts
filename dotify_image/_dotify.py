@@ -1,7 +1,7 @@
 from datetime import datetime
-from math import sqrt
+from math import ceil, sqrt
 from random import random
-from typing import Final, Dict
+from typing import Dict, Final
 
 from PIL import Image, ImageDraw
 
@@ -70,17 +70,24 @@ class Dotify:
                 return self._draw_hexagonal_grid()
 
     def _draw_rectilinear_grid(self: 'Dotify') -> None:
-        for x_min in range(0, self._input_image.width, self._dot_size):
-            for y_min in range(0, self._input_image.height, self._dot_size):
+        x_init: Final[int] = self._get_x_init()
+        y_init: Final[int] = self._get_y_init()
+        for x_min in range(x_init, self._input_image.width - x_init, self._dot_size):
+            for y_min in range(y_init, self._input_image.height - y_init, self._dot_size):
                 self._draw_region(x_min, y_min)
 
     def _draw_hexagonal_grid(self: 'Dotify') -> None:
         line_height: Final[int] = round(self._dot_size * sqrt(3))
-        for x_min in range(0, self._input_image.width, self._dot_size):
-            for y_min in range(0, self._input_image.height, line_height):
+        x_init: Final[int] = self._get_x_init()
+        y_init: Final[int] = self._get_y_init()
+        for x_min in range(x_init, self._input_image.width - x_init, self._dot_size):
+            for y_min in range(y_init, self._input_image.height - y_init, line_height):
                 self._draw_region(x_min, y_min)
-        for x_min in range(self._dot_size // 2, self._input_image.width, self._dot_size):
-            for y_min in range(-(line_height // 2), self._input_image.height, line_height):
+
+        x_init_hex: Final[int] = x_init + (self._dot_size // 2)
+        y_init_hex: Final[int] = y_init + (line_height // 2)
+        for x_min in range(x_init_hex, self._input_image.width - x_init_hex, self._dot_size):
+            for y_min in range(y_init_hex, self._input_image.height - y_init_hex, line_height):
                 self._draw_region(x_min, y_min)
 
     def _draw_region(self: 'Dotify', x_min: int, y_min: int) -> None:
@@ -167,6 +174,12 @@ class Dotify:
                 return capped_max_dot_width
             case DotifyTexture.ROUGH:
                 return capped_max_dot_width * ((4 + random()) / 5)
+
+    def _get_x_init(self: 'Dotify') -> int:
+        return ceil(self._input_image.width % self._dot_size / 2)
+
+    def _get_y_init(self: 'Dotify') -> int:
+        return ceil(self._input_image.height % self._dot_size / 2)
 
     def _get_x_max(self: 'Dotify', x_min: int) -> int:
         return min(x_min + self._dot_size, self._input_image.width)
