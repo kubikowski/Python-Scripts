@@ -4,7 +4,7 @@ from typing import Final, Dict
 
 from PIL import Image, ImageDraw
 
-from _dotify_gui import *
+from _dotify_cli import *
 from _dotify_method import DotifyMethod
 from _dotify_pattern import DotifyPattern
 from _rgb_color import RGB, RGBColor
