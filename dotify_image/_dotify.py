@@ -1,12 +1,14 @@
 from datetime import datetime
 from math import sqrt
+from random import random
 from typing import Final, Dict
 
 from PIL import Image, ImageDraw
 
 from _dotify_cli import *
-from _dotify_method import DotifyMethod
+from _dotify_coloring import DotifyColoring
 from _dotify_pattern import DotifyPattern
+from _dotify_texture import DotifyTexture
 from _rgb_color import RGB, RGBColor
 
 
@@ -17,8 +19,9 @@ class Dotify:
         input_image: Image.Image,
         background_color: RGBColor,
         dot_size: int,
-        method: DotifyMethod,
         pattern: DotifyPattern,
+        coloring: DotifyColoring,
+        texture: DotifyTexture,
         up_scaling: int,
     ) -> None:
         start_time: Final[datetime] = output_start_time()
@@ -26,8 +29,9 @@ class Dotify:
         self._input_image: Final[Image.Image] = input_image.convert(mode=RGB)
         self._background_color: Final[RGBColor] = background_color
         self._dot_size: Final[int] = dot_size
-        self._method: Final[DotifyMethod] = method
         self._pattern: Final[DotifyPattern] = pattern
+        self._coloring: Final[DotifyColoring] = coloring
+        self._texture: Final[DotifyTexture] = texture
         self._up_scaling: Final[int] = up_scaling
 
         self._output_image: Final[Image.Image] = self._get_initial_output_image()
@@ -40,11 +44,12 @@ class Dotify:
     def image(input_image: Image.Image) -> Image.Image:
         background_color: Final[RGBColor] = get_background_color()
         dot_size: Final[int] = get_dot_size(input_image.size)
-        method: Final[DotifyMethod] = get_method()
         pattern: Final[DotifyPattern] = get_pattern()
+        coloring: Final[DotifyColoring] = get_coloring()
+        texture: Final[DotifyTexture] = get_texture()
         up_scaling: Final[int] = get_up_scaling()
 
-        return Dotify(input_image, background_color, dot_size, method, pattern, up_scaling)\
+        return Dotify(input_image, background_color, dot_size, pattern, coloring, texture, up_scaling)\
             ._output_image
 
     def _get_initial_output_image(self: 'Dotify') -> Image.Image:
@@ -82,12 +87,10 @@ class Dotify:
         color_frequencies: Final[Dict[RGBColor, int]] = self._get_color_frequencies(x_min, y_min)
         if len(color_frequencies) > 0:
             color: Final[RGBColor] = self._get_color(color_frequencies)
-            frequency: Final[int] = self._get_frequency(color_frequencies, color)
 
-            min_dot_width: Final[float] = (frequency / self._dot_size / 2 * self._up_scaling)
-            max_dot_width: Final[float] = (self._dot_size / 2 * self._up_scaling)
-            capped_max_dot_width: Final[float] = max_dot_width - max(max_dot_width / 2.5, 2)
-            dot_width: Final[float] = min(min_dot_width, capped_max_dot_width)
+            min_dot_width: Final[float] = self._get_min_dot_width(color_frequencies, color)
+            max_dot_width: Final[float] = self._get_max_dot_width()
+            dot_width: Final[float] = min(min_dot_width, max_dot_width)
 
             x_mid: Final[float] = self._get_x_mid(x_min)
             y_mid: Final[float] = self._get_y_mid(y_min)
@@ -112,10 +115,10 @@ class Dotify:
         return color_frequencies
 
     def _get_color(self: 'Dotify', color_frequencies: Dict[RGBColor, int]) -> RGBColor:
-        match self._method:
-            case DotifyMethod.MEAN:
+        match self._coloring:
+            case DotifyColoring.MEAN:
                 return self._get_mean_color(color_frequencies)
-            case DotifyMethod.MODE:
+            case DotifyColoring.MODE:
                 return self._get_mode_color(color_frequencies)
 
     def _get_mean_color(self: 'Dotify', color_frequencies: Dict[RGBColor, int]) -> RGBColor:
@@ -138,10 +141,10 @@ class Dotify:
         return max(color_frequencies, key=color_frequencies.get)
 
     def _get_frequency(self: 'Dotify', color_frequencies: Dict[RGBColor, int], color: RGBColor) -> int:
-        match self._method:
-            case DotifyMethod.MEAN:
+        match self._coloring:
+            case DotifyColoring.MEAN:
                 return self._get_mean_frequency(color_frequencies)
-            case DotifyMethod.MODE:
+            case DotifyColoring.MODE:
                 return self._get_mode_frequency(color_frequencies, color)
 
     @staticmethod
@@ -151,6 +154,19 @@ class Dotify:
     @staticmethod
     def _get_mode_frequency(color_frequencies: Dict[RGBColor, int], color: RGBColor) -> int:
         return color_frequencies[color]
+
+    def _get_min_dot_width(self: 'Dotify', color_frequencies: Dict[RGBColor, int], color: RGBColor) -> float:
+        frequency: Final[int] = self._get_frequency(color_frequencies, color)
+        return frequency / self._dot_size / 2 * self._up_scaling
+
+    def _get_max_dot_width(self: 'Dotify') -> float:
+        max_dot_width: Final[float] = self._dot_size / 2 * self._up_scaling
+        capped_max_dot_width: Final[float] = max_dot_width - max(max_dot_width / 2.5, 2)
+        match self._texture:
+            case DotifyTexture.SMOOTH:
+                return capped_max_dot_width
+            case DotifyTexture.ROUGH:
+                return capped_max_dot_width * ((4 + random()) / 5)
 
     def _get_x_max(self: 'Dotify', x_min: int) -> int:
         return min(x_min + self._dot_size, self._input_image.width)

@@ -4,8 +4,9 @@ from typing import List, Final, Tuple
 
 from PIL import ImageColor
 
-from _dotify_method import DotifyMethod
+from _dotify_coloring import DotifyColoring
 from _dotify_pattern import DotifyPattern
+from _dotify_texture import DotifyTexture
 from _rgb_color import RGBColor
 from stack_images._image_format import ImageFormat
 
@@ -13,8 +14,9 @@ __all__: Final[List[str]] = [
     'get_input_image_path',
     'get_background_color',
     'get_dot_size',
-    'get_method',
     'get_pattern',
+    'get_coloring',
+    'get_texture',
     'get_up_scaling',
     'get_output_image_path',
     'output_start_time',
@@ -65,18 +67,6 @@ def input_dot_size(image_size: Tuple[int, int], recommended_dot_size: int) -> st
         '  → ').strip()
 
 
-def get_method() -> DotifyMethod:
-    method: Final[str] = input_method()
-    return DotifyMethod.from_string(method)
-
-
-def input_method() -> str:
-    return input(
-        'Would you like to specify a dot calculation method?\n' +
-        '  (mean) or (mode):\n' +
-        '  → ').strip()
-
-
 def get_pattern() -> DotifyPattern:
     pattern: Final[str] = input_pattern()
     return DotifyPattern.from_string(pattern)
@@ -86,6 +76,30 @@ def input_pattern() -> str:
     return input(
         'Would you like to specify a dot placement pattern?\n' +
         '  (r)ectalinear or (h)exagonal:\n' +
+        '  → ').strip()
+
+
+def get_coloring() -> DotifyColoring:
+    coloring: Final[str] = input_coloring()
+    return DotifyColoring.from_string(coloring)
+
+
+def input_coloring() -> str:
+    return input(
+        'Would you like to specify a coloring method?\n' +
+        '  (mean) or (mode) color:\n' +
+        '  → ').strip()
+
+
+def get_texture() -> DotifyTexture:
+    texture: Final[str] = input_texture()
+    return DotifyTexture.from_string(texture)
+
+
+def input_texture() -> str:
+    return input(
+        'Would you like to specify a dot texture?\n' +
+        '  (s)mooth or (r)ough texture:\n' +
         '  → ').strip()
 
 

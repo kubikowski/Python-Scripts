@@ -1,7 +1,7 @@
 """
 Name: Dotify Image
 Author: Nathaniel Holden
-Version: 0.0.5
+Version: 0.0.6
 Date: 2023-4-28
 Dependencies: Pillow
 
@@ -9,8 +9,9 @@ Inputs:
   * an image path
   * [optional] a background color
   * [optional] a dot size
-  * [optional] a dot color calculation method
   * [optional] a dot placement pattern
+  * [optional] a dot coloring method
+  * [optional] a dot texture
   * [optional] an up-scaling ratio
   * [optional] an output file path (.png if unspecified)
 Outputs:
