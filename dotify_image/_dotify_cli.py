@@ -64,7 +64,7 @@ def input_dot_size(image_size: Tuple[int, int], recommended_dot_size: int) -> st
         'Would you like to specify a dot size?\n' +
         '  The original image size is {} px.\n'.format(image_size) +
         '  We recommend a dot size of {} px.\n'.format(recommended_dot_size) +
-        '  → ').strip()
+        '  → ').strip().strip("px")
 
 
 def get_pattern() -> DotifyPattern:
@@ -99,7 +99,7 @@ def get_texture() -> DotifyTexture:
 def input_texture() -> str:
     return input(
         'Would you like to specify a dot texture?\n' +
-        '  (s)mooth or (r)ough texture:\n' +
+        '  (s)mooth, (r)ough, (c)oarse, or (g)lossy:\n' +
         '  → ').strip()
 
 

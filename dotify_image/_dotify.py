@@ -101,7 +101,6 @@ class Dotify:
 
             x_mid: Final[float] = self._get_x_mid(x_min)
             y_mid: Final[float] = self._get_y_mid(y_min)
-
             self._draw.ellipse(
                 xy=(x_mid - dot_width, y_mid - dot_width, x_mid + dot_width, y_mid + dot_width),
                 fill=color,
@@ -173,7 +172,11 @@ class Dotify:
             case DotifyTexture.SMOOTH:
                 return capped_max_dot_width
             case DotifyTexture.ROUGH:
-                return capped_max_dot_width * ((4 + random()) / 5)
+                return capped_max_dot_width * ((3 + random()) / 4)
+            case DotifyTexture.COARSE:
+                return capped_max_dot_width * ((2 + random()) / 3)
+            case DotifyTexture.GLOSSY:
+                return capped_max_dot_width * ((1 + random()) / 2)
 
     def _get_x_init(self: 'Dotify') -> int:
         return ceil(self._input_image.width % self._dot_size / 2)
