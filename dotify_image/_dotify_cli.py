@@ -8,7 +8,7 @@ from _dotify_coloring import DotifyColoring
 from _dotify_pattern import DotifyPattern
 from _dotify_texture import DotifyTexture
 from _rgb_color import RGBColor
-from stack_images._image_format import ImageFormat
+from util.image_format import ImageFormat
 
 __all__: Final[List[str]] = [
     'get_input_image_path',

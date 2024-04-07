@@ -17,8 +17,8 @@ from typing import Final, Optional
 
 from PIL import Image
 
-from _image_format import ImageFormat
 from _orientation import Orientation
+from util.image_format import ImageFormat
 
 
 def stack_images() -> None:

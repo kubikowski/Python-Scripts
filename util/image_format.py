@@ -1,5 +1,6 @@
 from enum import Enum
 from os import path
+from pathlib import Path
 from typing import Final, Optional
 
 
@@ -8,9 +9,8 @@ class ImageFormat(Enum):
     PNG = 'png'
 
     @staticmethod
-    def from_file_path(file_path: str) -> Optional['ImageFormat']:
-        sanitized_path: Final[str] = file_path.lower()
-        file_extension: Final[str] = path.splitext(sanitized_path)[-1].strip('.')
+    def from_file_path(file_path: Path | str) -> Optional['ImageFormat']:
+        file_extension: Final[str] = path.splitext(file_path)[-1].strip('.').lower()
 
         match file_extension:
             case 'jpg' | 'jpeg':
@@ -21,7 +21,7 @@ class ImageFormat(Enum):
                 return None
 
     @staticmethod
-    def add_format_to_path(file_path: str) -> str:
+    def add_format_to_path(file_path: Path | str) -> str:
         image_format: Final[ImageFormat] = ImageFormat.from_file_path(file_path)
 
         if image_format is not None:
