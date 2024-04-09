@@ -55,7 +55,7 @@ def _input_image_path() -> Optional[str]:
 
 def _save_image(image: Image) -> None:
     file_path: Final[str] = input('new image path: ')
-    formatted_path: Final[str] = ImageFormat.add_format_to_path(file_path)
+    formatted_path: Final[str] = ImageFormat.PNG.format_path(file_path)
 
     image.save(formatted_path)
 

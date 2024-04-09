@@ -118,7 +118,7 @@ def input_up_scaling() -> str:
 def get_output_image_path() -> str:
     file_path: Final[str] = input_output_image_path()
     valid_path: Final[str] = file_path if file_path else 'output.png'
-    return ImageFormat.add_format_to_path(valid_path)
+    return ImageFormat.PNG.format_path(valid_path)
 
 
 def input_output_image_path() -> str:

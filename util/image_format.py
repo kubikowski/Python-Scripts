@@ -5,7 +5,7 @@ from typing import Final, Optional
 
 
 class ImageFormat(Enum):
-    JPG = 'jpeg'
+    JPEG = 'jpeg'
     PNG = 'png'
 
     @staticmethod
@@ -14,17 +14,16 @@ class ImageFormat(Enum):
 
         match file_extension:
             case 'jpg' | 'jpeg':
-                return ImageFormat.JPG
+                return ImageFormat.JPEG
             case 'png':
                 return ImageFormat.PNG
             case _:
                 return None
 
-    @staticmethod
-    def add_format_to_path(file_path: Path | str) -> str:
-        image_format: Final[ImageFormat] = ImageFormat.from_file_path(file_path)
+    def format_path(self: 'ImageFormat', file_path: Path | str) -> str:
+        current_format: Final[ImageFormat] = ImageFormat.from_file_path(file_path)
 
-        if image_format is not None:
-            return file_path
+        if current_format is None:
+            return '{}.{}'.format(file_path, self.value)
         else:
-            return file_path + '.png'
+            return file_path
