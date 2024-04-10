@@ -33,7 +33,7 @@ def input_working_dir() -> Path:
         'Enter a directory path:\n' +
         '  → ').strip()
 
-    return Path(path.expanduser(working_dir))
+    return Path(path.expandvars(path.expanduser(working_dir)))
 
 
 def print_file_metadata(file_path: Path) -> None:
