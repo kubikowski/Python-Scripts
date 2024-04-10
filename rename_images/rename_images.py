@@ -1,11 +1,12 @@
 """
 Name: Rename Images
 Author: Nathaniel Holden
-Version: 0.0.2
+Version: 0.0.3
 Date: 2024-4-09
 
 Inputs:
-  · A relative working path from the home directory.
+  · A working directory.
+  · Whether to recursively include subdirectories.
   · Validations for each potential image to rename.
 """
 from os import listdir, path, rename
@@ -16,16 +17,10 @@ from typing import Final
 from util.image_format import ImageFormat
 
 
-def rename_images_in_dir() -> None:
+def rename_images() -> None:
     working_dir: Final[Path] = input_working_dir()
-    handles: Final[list[Path]] = [working_dir / handle for handle in listdir(working_dir)]
-    files: Final[list[Path]] = [handle for handle in handles if path.isfile(handle)]
-
-    for file_path in files:
-        print_file_metadata(file_path)
-
-        if ImageFormat.from_file_path(file_path) is not None:
-            verify_rename_image(file_path)
+    recursive: Final[bool] = include_sub_dirs(working_dir)
+    rename_images_in_dir(working_dir, working_dir, recursive)
 
 
 def input_working_dir() -> Path:
@@ -34,6 +29,62 @@ def input_working_dir() -> Path:
         '  → ').strip()
 
     return Path(path.expandvars(path.expanduser(working_dir)))
+
+
+def include_sub_dirs(working_dir: Path) -> bool:
+    return len(get_sub_dirs(working_dir)) > 0 and input_include_sub_dirs(working_dir)
+
+
+def input_include_sub_dirs(working_dir: Path) -> bool:
+    print('\nThis directory also contains the following subdirectories:')
+
+    for sub_dir in get_sub_dirs(working_dir):
+        print_sub_dir(working_dir, sub_dir)
+
+    return input(
+        '\nWould you like to rename images in these subdirectories as well? Y/[N]' +
+        '\n  → ').strip().lower().startswith('y')
+
+
+def print_sub_dir(working_dir: Path, active_dir: Path) -> None:
+    relative_path: Final[str] = path.relpath(active_dir, working_dir)
+    print('  → {}'.format(relative_path))
+
+    for sub_dir in get_sub_dirs(active_dir):
+        print_sub_dir(working_dir, sub_dir)
+
+
+def rename_images_in_dir(working_dir: Path, active_dir: Path, recursive: bool) -> None:
+    print_active_dir(working_dir, active_dir)
+
+    for file_path in get_files(active_dir):
+        print_file_metadata(file_path)
+
+        if ImageFormat.from_file_path(file_path) is not None:
+            verify_rename_image(file_path)
+
+    if recursive:
+        for sub_dir in get_sub_dirs(active_dir):
+            rename_images_in_dir(working_dir, sub_dir, recursive)
+
+
+def print_active_dir(working_dir: Path, active_dir: Path) -> None:
+    relative_path: Final[str] = path.relpath(active_dir, working_dir)
+    display_path: Final[str] = str(working_dir) if working_dir == active_dir else relative_path
+    print(
+        '\n# - {} #'.format('Directory: '.ljust(73, '-')) +
+        '\n# {} #'.format(str(display_path).ljust(75, ' ')) +
+        '\n# {} #'.format(''.ljust(75, '-')))
+
+
+def get_sub_dirs(working_dir: Path) -> list[Path]:
+    handles: Final[list[Path]] = [working_dir / handle for handle in listdir(working_dir)]
+    return [handle for handle in handles if path.isdir(handle)]
+
+
+def get_files(working_dir: Path) -> list[Path]:
+    handles: Final[list[Path]] = [working_dir / handle for handle in listdir(working_dir)]
+    return [handle for handle in handles if path.isfile(handle)]
 
 
 def print_file_metadata(file_path: Path) -> None:
@@ -100,4 +151,4 @@ def timestamp(epoch_millis: float) -> str:
 
 
 if __name__ == '__main__':
-    rename_images_in_dir()
+    rename_images()
