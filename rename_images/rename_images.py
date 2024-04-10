@@ -1,7 +1,7 @@
 """
 Name: Rename Images
 Author: Nathaniel Holden
-Version: 0.0.1
+Version: 0.0.2
 Date: 2024-4-09
 
 Inputs:
@@ -29,9 +29,11 @@ def rename_images_in_dir() -> None:
 
 
 def input_working_dir() -> Path:
-    return Path.home() / input(
-        'Enter a directory path from Home:\n' +
+    working_dir: Final[str] = input(
+        'Enter a directory path:\n' +
         '  → ').strip()
+
+    return Path(path.expanduser(working_dir))
 
 
 def print_file_metadata(file_path: Path) -> None:
