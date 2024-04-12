@@ -100,7 +100,7 @@ def get_texture() -> DotifyTexture:
 def input_texture() -> str:
     return input(
         'Would you like to specify a dot texture?\n' +
-        '  (s)mooth, (r)ough, (c)oarse, or (g)lossy:\n' +
+        '  (s)mooth, (r)ough, (c)oarse, (g)lossy, or (h)oly:\n' +
         '  → ').strip()
 
 

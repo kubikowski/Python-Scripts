@@ -1,6 +1,5 @@
 from datetime import datetime
 from math import ceil, sqrt
-from random import random
 from typing import Dict, Final
 
 from PIL import Image, ImageDraw
@@ -163,20 +162,13 @@ class Dotify:
 
     def _get_min_dot_width(self: 'Dotify', color_frequencies: Dict[RGBColor, int], color: RGBColor) -> float:
         frequency: Final[int] = self._get_frequency(color_frequencies, color)
-        return frequency / self._dot_size / 2 * self._up_scaling
+        min_dot_width: Final[float] = frequency / self._dot_size / 2 * self._up_scaling
+        return self._texture.get_min_dot_width(min_dot_width)
 
     def _get_max_dot_width(self: 'Dotify') -> float:
         max_dot_width: Final[float] = self._dot_size / 2 * self._up_scaling
         capped_max_dot_width: Final[float] = max_dot_width - max(max_dot_width / 2.5, 2)
-        match self._texture:
-            case DotifyTexture.SMOOTH:
-                return capped_max_dot_width
-            case DotifyTexture.ROUGH:
-                return capped_max_dot_width * ((3 + random()) / 4)
-            case DotifyTexture.COARSE:
-                return capped_max_dot_width * ((2 + random()) / 3)
-            case DotifyTexture.GLOSSY:
-                return capped_max_dot_width * ((1 + random()) / 2)
+        return self._texture.get_max_dot_width(capped_max_dot_width)
 
     def _get_x_init(self: 'Dotify') -> int:
         return ceil(self._input_image.width % self._dot_size / 2)
