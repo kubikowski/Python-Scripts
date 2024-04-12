@@ -1,7 +1,7 @@
 """
 Name: Dotify Image
 Author: Nathaniel Holden
-Version: 0.0.6
+Version: 0.0.7
 Date: 2023-4-28
 Dependencies: Pillow
 
@@ -17,7 +17,7 @@ Inputs:
 Outputs:
   * a dotified version of the input image
 """
-
+from pathlib import Path
 from typing import Final
 
 from PIL import Image
@@ -27,11 +27,11 @@ from _dotify_cli import get_input_image_path, get_output_image_path
 
 
 def dotify_image() -> None:
-    input_image_path: Final[str] = get_input_image_path()
+    input_image_path: Final[Path] = get_input_image_path()
     input_image: Final[Image.Image] = Image.open(input_image_path)
 
     output_image: Final[Image.Image] = Dotify.image(input_image)
-    output_image_path: Final[str] = get_output_image_path()
+    output_image_path: Final[Path] = get_output_image_path()
 
     output_image.save(output_image_path)
 

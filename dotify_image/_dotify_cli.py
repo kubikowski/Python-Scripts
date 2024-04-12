@@ -1,5 +1,5 @@
 from datetime import datetime
-from os import path
+from pathlib import Path
 from typing import List, Final, Tuple
 
 from PIL import ImageColor
@@ -9,6 +9,7 @@ from _dotify_pattern import DotifyPattern
 from _dotify_texture import DotifyTexture
 from _rgb_color import RGBColor
 from util.image_format import ImageFormat
+from util.path import normalize_path
 
 __all__: Final[List[str]] = [
     'get_input_image_path',
@@ -24,14 +25,14 @@ __all__: Final[List[str]] = [
 ]
 
 
-def get_input_image_path() -> str:
+def get_input_image_path() -> Path:
     file_path: Final[str] = input_input_image_path()
     if file_path == '' or file_path.lower() == 'stop':
         raise KeyboardInterrupt()
     elif ImageFormat.from_file_path(file_path) is None:
         raise ValueError('unsupported file format in path: "{}"'.format(file_path))
     else:
-        return path.expanduser(file_path)
+        return normalize_path(file_path)
 
 
 def input_input_image_path() -> str:
@@ -115,10 +116,10 @@ def input_up_scaling() -> str:
         '  → ').strip()
 
 
-def get_output_image_path() -> str:
+def get_output_image_path() -> Path:
     file_path: Final[str] = input_output_image_path()
     valid_path: Final[str] = file_path if file_path else 'output.png'
-    return ImageFormat.PNG.format_path(valid_path)
+    return normalize_path(ImageFormat.PNG.format_path(valid_path))
 
 
 def input_output_image_path() -> str:

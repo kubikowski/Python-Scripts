@@ -15,6 +15,7 @@ from time import ctime, strftime, strptime
 from typing import Final
 
 from util.image_format import ImageFormat
+from util.path import normalize_path
 
 
 def rename_images() -> None:
@@ -28,7 +29,7 @@ def input_working_dir() -> Path:
         'Enter a directory path:\n' +
         '  → ').strip()
 
-    return Path(path.expandvars(path.expanduser(working_dir)))
+    return normalize_path(working_dir)
 
 
 def include_sub_dirs(working_dir: Path) -> bool:

@@ -1,7 +1,7 @@
 """
 Name: Stack Images
 Author: Nathaniel Holden
-Version: 0.2.1
+Version: 0.2.2
 Date: 30/05/2019
 Dependencies: numpy, Pillow
 
@@ -12,29 +12,30 @@ Inputs:
 Outputs:
   · a combination of the images, stacked horizontally or vertically
 """
-
+from pathlib import Path
 from typing import Final, Optional
 
 from PIL import Image
 
 from _orientation import Orientation
 from util.image_format import ImageFormat
+from util.path import normalize_path
 
 
 def stack_images() -> None:
-    input_images: Final[list[Image]] = _input_images()
+    input_images: Final[list[Image.Image]] = _input_images()
     orientation: Final[Orientation] = Orientation.from_input()
 
-    resized_images: Final[list[Image]] = orientation.resize_images(input_images)
-    stacked_image: Final[Image] = orientation.stack_images(resized_images)
+    resized_images: Final[list[Image.Image]] = orientation.resize_images(input_images)
+    stacked_image: Final[Image.Image] = orientation.stack_images(resized_images)
 
     _save_image(stacked_image)
 
 
-def _input_images() -> list[Image]:
-    file_paths: Final[list[str]] = []
+def _input_images() -> list[Image.Image]:
+    file_paths: Final[list[Path]] = []
 
-    file_path: Optional[str] = _input_image_path()
+    file_path: Optional[Path] = _input_image_path()
     while file_path is not None:
         file_paths.append(file_path)
         file_path = _input_image_path()
@@ -42,7 +43,7 @@ def _input_images() -> list[Image]:
     return [Image.open(i) for i in file_paths]
 
 
-def _input_image_path() -> Optional[str]:
+def _input_image_path() -> Optional[Path]:
     file_path: Final[str] = input('image path or (stop): ')
 
     if file_path.lower() == 'stop':
@@ -50,12 +51,12 @@ def _input_image_path() -> Optional[str]:
     elif ImageFormat.from_file_path(file_path) is None:
         raise ValueError('unsupported file format in path: "{}"'.format(file_path))
     else:
-        return file_path
+        return normalize_path(file_path)
 
 
 def _save_image(image: Image) -> None:
     file_path: Final[str] = input('new image path: ')
-    formatted_path: Final[str] = ImageFormat.PNG.format_path(file_path)
+    formatted_path: Final[Path] = normalize_path(ImageFormat.PNG.format_path(file_path))
 
     image.save(formatted_path)
 
