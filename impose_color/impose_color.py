@@ -1,7 +1,7 @@
 """
 Name: Impose Color
 Author: Nathaniel Holden
-Version: 0.1.3
+Version: 0.1.4
 Date: 18/03/2020
 Dependencies: Pillow
 
@@ -14,7 +14,7 @@ Outputs:
 
 from typing import Final, List
 
-from _pixel_color import PixelColor
+from util.pixel_color import PixelColor
 
 
 def impose_color() -> None:
