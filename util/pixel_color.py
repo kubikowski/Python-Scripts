@@ -4,7 +4,7 @@ from PIL import ImageColor
 
 
 class PixelColor(object):
-    def __init__(self, color: str) -> None:
+    def __init__(self: 'PixelColor', color: str) -> None:
         super(PixelColor, self).__init__()
         self.color: Final[tuple[int, int, int, int]] = ImageColor.getrgb(color)
         self.r: Final[int] = self.color[0]
@@ -38,15 +38,15 @@ class PixelColor(object):
             'between the background and foreground colors:\n' +
             '  → '))
 
-    def get_imposed_gradient(self, imposed: 'PixelColor', gradient_steps: int) -> List['PixelColor']:
+    def get_imposed_gradient(self: 'PixelColor', imposed: 'PixelColor', gradient_steps: int) -> List['PixelColor']:
         gradient_alphas: Final[List[int]] = [round(255 * step / (gradient_steps + 1)) for step in range(1, gradient_steps + 1)]
         imposed_alphas: Final[List['PixelColor']] = [imposed.get_imposed_alpha(alpha) for alpha in gradient_alphas]
         return [self.get_imposed_color(imposed_alpha) for imposed_alpha in imposed_alphas]
 
-    def get_imposed_alpha(self, alpha: int) -> 'PixelColor':
+    def get_imposed_alpha(self: 'PixelColor', alpha: int) -> 'PixelColor':
         return PixelColor('rgba({},{},{},{})'.format(self.r, self.g, self.b, alpha))
 
-    def get_imposed_color(self, imposed: 'PixelColor') -> 'PixelColor':
+    def get_imposed_color(self: 'PixelColor', imposed: 'PixelColor') -> 'PixelColor':
         r: Final[int] = self._calculate_target_hue(self.r, imposed.r, imposed.a)
         g: Final[int] = self._calculate_target_hue(self.g, imposed.g, imposed.a)
         b: Final[int] = self._calculate_target_hue(self.b, imposed.b, imposed.a)
@@ -58,7 +58,13 @@ class PixelColor(object):
         alpha: Final[float] = float(a / 255)
         return int(((1 - alpha) * background_hue) + (alpha * foreground_hue))
 
-    def to_string(self) -> str:
+    def to_hex_string(self: 'PixelColor') -> str:
+        if len(self.color) == 4:
+            return '#{:02x}{:02x}{:02x}{:02x}'.format(self.r, self.g, self.b, self.a)
+        else:
+            return '#{:02x}{:02x}{:02x}'.format(self.r, self.g, self.b)
+
+    def to_string(self: 'PixelColor') -> str:
         if len(self.color) == 4:
             return 'rgba{}'.format(self.color)
         else:
