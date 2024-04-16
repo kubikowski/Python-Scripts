@@ -23,7 +23,7 @@ from typing import Final
 from PIL import Image
 
 from _dotify import Dotify
-from _dotify_cli import get_input_image_path, get_output_image_path
+from util.path import get_input_image_path, get_output_image_path
 
 
 def dotify_image() -> None:

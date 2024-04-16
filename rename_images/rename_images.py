@@ -43,7 +43,7 @@ def input_include_sub_dirs(working_dir: Path) -> bool:
         print_sub_dir(working_dir, sub_dir)
 
     return input(
-        '\nWould you like to rename images in these subdirectories as well? Y/[N]' +
+        '\nWould you like to rename images in these subdirectories as well? [y/N]' +
         '\n  → ').strip().lower().startswith('y')
 
 
@@ -123,7 +123,7 @@ def input_should_rename_image(file_path: Path) -> bool:
     new_file_name: Final[str] = get_new_file_name(file_path)
     return input(
         '  → Recognized as {}\n'.format(image_format) +
-        '  → Would you like to rename this file as "{}"? Y/[N]\n'.format(new_file_name) +
+        '  → Would you like to rename this file as "{}"? [y/N]\n'.format(new_file_name) +
         '  → ').strip().lower().startswith('y')
 
 

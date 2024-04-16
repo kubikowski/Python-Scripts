@@ -1,5 +1,4 @@
 from datetime import datetime
-from pathlib import Path
 from typing import List, Final, Tuple
 
 from PIL import ImageColor
@@ -8,37 +7,17 @@ from _dotify_coloring import DotifyColoring
 from _dotify_pattern import DotifyPattern
 from _dotify_texture import DotifyTexture
 from _rgb_color import RGBColor
-from util.image_format import ImageFormat
-from util.path import normalize_path
 
 __all__: Final[List[str]] = [
-    'get_input_image_path',
     'get_background_color',
     'get_dot_size',
     'get_pattern',
     'get_coloring',
     'get_texture',
     'get_up_scaling',
-    'get_output_image_path',
     'output_start_time',
     'output_end_time',
 ]
-
-
-def get_input_image_path() -> Path:
-    file_path: Final[str] = input_input_image_path()
-    if file_path == '' or file_path.lower() == 'stop':
-        raise KeyboardInterrupt()
-    elif ImageFormat.from_file_path(file_path) is None:
-        raise ValueError('unsupported file format in path: "{}"'.format(file_path))
-    else:
-        return normalize_path(file_path)
-
-
-def input_input_image_path() -> str:
-    return input(
-        '\nPlease enter an image path or (stop)\n' +
-        '  → ').strip()
 
 
 def get_background_color() -> RGBColor:
@@ -113,18 +92,6 @@ def input_up_scaling() -> str:
     return input(
         'Would you like to up-scale the output image?\n' +
         '  If so, enter an up-scaling multiplier.\n' +
-        '  → ').strip()
-
-
-def get_output_image_path() -> Path:
-    file_path: Final[str] = input_output_image_path()
-    valid_path: Final[str] = file_path if file_path else 'output.png'
-    return normalize_path(ImageFormat.PNG.format_path(valid_path))
-
-
-def input_output_image_path() -> str:
-    return input(
-        'Please enter an output image path:\n' +
         '  → ').strip()
 
 

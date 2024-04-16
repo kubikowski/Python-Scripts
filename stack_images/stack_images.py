@@ -1,7 +1,7 @@
 """
 Name: Stack Images
 Author: Nathaniel Holden
-Version: 0.2.2
+Version: 0.2.3
 Date: 30/05/2019
 Dependencies: numpy, Pillow
 
@@ -18,8 +18,7 @@ from typing import Final, Optional
 from PIL import Image
 
 from _orientation import Orientation
-from util.image_format import ImageFormat
-from util.path import normalize_path
+from util.path import get_input_image_path, get_output_image_path
 
 
 def stack_images() -> None:
@@ -35,30 +34,17 @@ def stack_images() -> None:
 def _input_images() -> list[Image.Image]:
     file_paths: Final[list[Path]] = []
 
-    file_path: Optional[Path] = _input_image_path()
+    file_path: Optional[Path] = get_input_image_path()
     while file_path is not None:
         file_paths.append(file_path)
-        file_path = _input_image_path()
+        file_path = get_input_image_path()
 
     return [Image.open(i) for i in file_paths]
 
 
-def _input_image_path() -> Optional[Path]:
-    file_path: Final[str] = input('image path or (stop): ')
-
-    if file_path.lower() == 'stop':
-        return None
-    elif ImageFormat.from_file_path(file_path) is None:
-        raise ValueError('unsupported file format in path: "{}"'.format(file_path))
-    else:
-        return normalize_path(file_path)
-
-
 def _save_image(image: Image) -> None:
-    file_path: Final[str] = input('new image path: ')
-    formatted_path: Final[Path] = normalize_path(ImageFormat.PNG.format_path(file_path))
-
-    image.save(formatted_path)
+    file_path: Final[Path] = get_output_image_path()
+    image.save(file_path)
 
 
 if __name__ == '__main__':
