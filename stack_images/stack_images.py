@@ -42,7 +42,7 @@ def _input_images() -> list[Image.Image]:
     return [Image.open(i) for i in file_paths]
 
 
-def _save_image(image: Image) -> None:
+def _save_image(image: Image.Image) -> None:
     file_path: Final[Path] = get_output_image_path()
     image.save(file_path)
 

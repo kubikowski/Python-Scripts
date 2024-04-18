@@ -6,7 +6,6 @@ from util.image_format import ImageFormat
 
 __all__: Final[list[str]] = [
     'normalize_path',
-    'normalize_image_path',
     'get_input_image_path',
     'get_output_image_path',
 ]
@@ -15,11 +14,6 @@ __all__: Final[list[str]] = [
 def normalize_path(file_path: Path | str) -> Path:
     """Normalizes a file path, with tilde and variable expansion."""
     return Path(path.expandvars(path.expanduser(file_path)))
-
-
-def normalize_image_path(file_path: Path | str) -> Path:
-    """Normalizes a file path, with tilde and variable expansion. Adds .png extension if unset."""
-    return Path(ImageFormat.PNG.format_path(path.expandvars(path.expanduser(file_path))))
 
 
 def get_input_image_path() -> Path:
@@ -40,8 +34,8 @@ def get_input_image_path() -> Path:
 
 def get_output_image_path() -> Path:
     file_path: Final[str] = input_output_image_path()
-    valid_path: Final[str] = file_path if file_path else 'output.png'
-    norm_path: Final[Path] = normalize_image_path(valid_path)
+    valid_path: Final[str] = ImageFormat.PNG.format_path(file_path) if file_path else 'output.png'
+    norm_path: Final[Path] = normalize_path(valid_path)
 
     if path.isdir(norm_path):
         raise ValueError('The given path is a directory: "{}"'.format(valid_path))

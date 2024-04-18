@@ -1,4 +1,4 @@
-from typing import Final, List
+from typing import Final
 
 from PIL import ImageColor
 
@@ -38,9 +38,9 @@ class PixelColor(object):
             'between the background and foreground colors:\n' +
             '  → '))
 
-    def get_imposed_gradient(self: 'PixelColor', imposed: 'PixelColor', gradient_steps: int) -> List['PixelColor']:
-        gradient_alphas: Final[List[int]] = [round(255 * step / (gradient_steps + 1)) for step in range(1, gradient_steps + 1)]
-        imposed_alphas: Final[List['PixelColor']] = [imposed.get_imposed_alpha(alpha) for alpha in gradient_alphas]
+    def get_imposed_gradient(self: 'PixelColor', imposed: 'PixelColor', gradient_steps: int) -> list['PixelColor']:
+        gradient_alphas: Final[list[int]] = [round(255 * step / (gradient_steps + 1)) for step in range(1, gradient_steps + 1)]
+        imposed_alphas: Final[list['PixelColor']] = [imposed.get_imposed_alpha(alpha) for alpha in gradient_alphas]
         return [self.get_imposed_color(imposed_alpha) for imposed_alpha in imposed_alphas]
 
     def get_imposed_alpha(self: 'PixelColor', alpha: int) -> 'PixelColor':
