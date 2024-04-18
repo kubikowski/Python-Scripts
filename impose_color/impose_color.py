@@ -1,7 +1,7 @@
 """
 Name: Impose Color
 Author: Nathaniel Holden
-Version: 0.1.4
+Version: 0.1.5
 Date: 18/03/2020
 Dependencies: Pillow
 
@@ -11,7 +11,6 @@ Inputs:
 Outputs:
   · an opaque (rgb) imposed color
 """
-
 from typing import Final, List
 
 from util.pixel_color import PixelColor
@@ -40,8 +39,10 @@ def impose_color_gradient() -> None:
         'foreground color: {}\n'.format(foreground_color.to_string()) +
         'gradient colors:'
     )
+
+    gradient_steps_length: Final[int] = len(str(gradient_steps))
     print('\n'.join([
-        '{} {}'.format('{}.'.format(index + 1).ljust(3), color.to_string())
+        '{} {}'.format('{}.'.format(index + 1).ljust(gradient_steps_length + 1), color.to_string())
         for index, color in enumerate(imposed_gradient)
     ]))
 
