@@ -8,6 +8,8 @@ Dependencies: Pillow
 Inputs:
   · an input image path
   · an output file path (.png if unspecified)
+  · [optional] an output image width
+  · [optional] an output image height
 Outputs:
   · a resized output image
 """
