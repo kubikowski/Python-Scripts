@@ -1,15 +1,16 @@
 from datetime import datetime
-from typing import List, Final, Tuple
+from typing import List, Final, Optional, Tuple
 
 from PIL import ImageColor
 
 from _dotify_coloring import DotifyColoring
 from _dotify_pattern import DotifyPattern
 from _dotify_texture import DotifyTexture
-from _rgb_color import RGBColor
+from util.rgb_color import RGBColor
 
 __all__: Final[List[str]] = [
     'get_background_color',
+    'get_foreground_color',
     'get_dot_size',
     'get_pattern',
     'get_coloring',
@@ -29,6 +30,20 @@ def get_background_color() -> RGBColor:
 def input_background_color() -> str:
     return input(
         'Would you like to specify a background color?\n' +
+        '  If you do not, the default is black.\n' +
+        '  → ').strip()
+
+
+def get_foreground_color(coloring: DotifyColoring) -> Optional[RGBColor]:
+    if coloring == DotifyColoring.CONSTANT:
+        input_color: Final[str] = input_foreground_color()
+        valid_color: Final[str] = input_color if input_color else 'black'
+        return RGBColor.of(ImageColor.getrgb(valid_color))
+
+
+def input_foreground_color() -> str:
+    return input(
+        'Would you like to specify a foreground color?\n' +
         '  If you do not, the default is black.\n' +
         '  → ').strip()
 
@@ -67,7 +82,7 @@ def get_coloring() -> DotifyColoring:
 def input_coloring() -> str:
     return input(
         'Would you like to specify a coloring method?\n' +
-        '  (mean) or (mode) color:\n' +
+        '  (mean), (mode), or (constant) color:\n' +
         '  → ').strip()
 
 
