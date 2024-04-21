@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Final, Optional, Tuple
+from typing import Final, Optional, Tuple
 
 from PIL import ImageColor
 
@@ -8,7 +8,7 @@ from _dotify_pattern import DotifyPattern
 from _dotify_texture import DotifyTexture
 from util.rgb_color import RGBColor
 
-__all__: Final[List[str]] = [
+__all__: Final[list[str]] = [
     'get_background_color',
     'get_foreground_color',
     'get_dot_size',
