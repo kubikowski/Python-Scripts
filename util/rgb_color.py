@@ -17,6 +17,9 @@ __RGBAColor__ = namedtuple('RGBAColor', __RGBColor__._fields + ('alpha',))
 
 
 class RGBColor(__RGBColor__):
+    red: int
+    green: int
+    blue: int
 
     @staticmethod
     def of(color: Tuple[int, int, int] | Tuple[int, int, int, int] | 'RGBColor') -> 'RGBColor':
@@ -33,6 +36,10 @@ class RGBColor(__RGBColor__):
 
 
 class RGBAColor(__RGBAColor__, RGBColor):
+    red: int
+    green: int
+    blue: int
+    alpha: int
 
     @staticmethod
     def of(color: Tuple[int, int, int] | Tuple[int, int, int, int] | 'RGBColor') -> 'RGBAColor':
