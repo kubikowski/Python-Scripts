@@ -19,32 +19,32 @@ class PixelColor(object):
 
     @staticmethod
     def input_color(context: str = None) -> 'PixelColor':
-        background_color: Final[str] = input(
+        color: Final[str] = input(
             'Please enter {} color:\n'.format('a ' + context if context else 'a') +
             '  · any web named color, eg: white\n' +
             '  · any hex[a] color, eg: #FFF or #0000007F\n' +
             '  · any rbg[a] color, eg: rgb(255,255,255) or rgba(0,0,0,127)\n' +
             '  → ')
-        return PixelColor.of(background_color)
+        return PixelColor.of(color)
 
     @staticmethod
     def input_opaque_color(context: str = None) -> 'PixelColor':
-        background_color: Final[str] = input(
+        color: Final[str] = input(
             'Please enter {} color:\n'.format('a ' + context if context else 'a') +
             '  · any web named color, eg: white\n' +
             '  · any hex color, eg: #FFF or #FFFFFF\n' +
             '  · any rbg color, eg: rgb(255,255,255)\n' +
             '  → ')
-        return PixelColor.of(background_color)
+        return PixelColor.of(color)
 
     @staticmethod
     def input_transparent_color(context: str = None) -> 'PixelColor':
-        foreground_color: Final[str] = input(
+        color: Final[str] = input(
             'Please enter {} color with an alpha value:\n'.format('a ' + context if context else 'a') +
             '  · any hexa color, eg: #0007 or #0000007F\n' +
             '  · any rgba color, eg rgba(0,0,0,127)\n' +
             '  → ')
-        return PixelColor.of(foreground_color)
+        return PixelColor.of(color)
 
     @staticmethod
     def input_gradient_steps() -> int:
