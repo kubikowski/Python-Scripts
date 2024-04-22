@@ -18,9 +18,9 @@ class PixelColor(object):
         return PixelColor(RGBColor.of(ImageColor.getrgb(color)))
 
     @staticmethod
-    def input_color() -> 'PixelColor':
+    def input_color(context: str = None) -> 'PixelColor':
         background_color: Final[str] = input(
-            'Please enter a color:\n' +
+            'Please enter {} color:\n'.format('a ' + context if context else 'a') +
             '  · any web named color, eg: white\n' +
             '  · any hex[a] color, eg: #FFF or #0000007F\n' +
             '  · any rbg[a] color, eg: rgb(255,255,255) or rgba(0,0,0,127)\n' +
@@ -28,9 +28,9 @@ class PixelColor(object):
         return PixelColor.of(background_color)
 
     @staticmethod
-    def input_background_color() -> 'PixelColor':
+    def input_opaque_color(context: str = None) -> 'PixelColor':
         background_color: Final[str] = input(
-            'Please enter a background color:\n' +
+            'Please enter {} color:\n'.format('a ' + context if context else 'a') +
             '  · any web named color, eg: white\n' +
             '  · any hex color, eg: #FFF or #FFFFFF\n' +
             '  · any rbg color, eg: rgb(255,255,255)\n' +
@@ -38,9 +38,9 @@ class PixelColor(object):
         return PixelColor.of(background_color)
 
     @staticmethod
-    def input_foreground_color() -> 'PixelColor':
+    def input_transparent_color(context: str = None) -> 'PixelColor':
         foreground_color: Final[str] = input(
-            'Please enter a foreground color with an alpha value:\n' +
+            'Please enter {} color with an alpha value:\n'.format('a ' + context if context else 'a') +
             '  · any hexa color, eg: #0007 or #0000007F\n' +
             '  · any rgba color, eg rgba(0,0,0,127)\n' +
             '  → ')
