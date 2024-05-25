@@ -7,6 +7,8 @@ from typing import Final, Optional
 class ImageFormat(Enum):
     JPEG = 'jpeg'
     PNG = 'png'
+    TIFF = 'tiff'
+    WEBP = 'webp'
 
     @staticmethod
     def from_file_path(file_path: Path | str) -> Optional['ImageFormat']:
@@ -17,6 +19,10 @@ class ImageFormat(Enum):
                 return ImageFormat.JPEG
             case 'png':
                 return ImageFormat.PNG
+            case 'tif' | 'tiff':
+                return ImageFormat.TIFF
+            case 'webp':
+                return ImageFormat.WEBP
             case _:
                 return None
 
